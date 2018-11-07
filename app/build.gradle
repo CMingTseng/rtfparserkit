@@ -1,0 +1,108 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+    compileSdkVersion compileVersion
+    buildToolsVersion buildVersion
+    lintOptions {
+        abortOnError false
+        disable "ResourceType"
+        disable 'MissingTranslation'
+        checkReleaseBuilds false
+    }
+    defaultConfig {
+        applicationId "com.rtfparserkit.adnroid"
+        minSdkVersion minVersion
+        targetSdkVersion targetVersion
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility javasource
+        targetCompatibility javatarget
+    }
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/io.netty.versions.properties'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            //proguard  Yes / No
+            applicationIdSuffix '.debug'
+            shrinkResources false
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            shrinkResources false
+            minifyEnabled false
+            //proguard  Yes / No
+            zipAlignEnabled false
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java', 'src/main/kotlin/']
+            aidl.srcDirs = ['src/main/aidl']
+            res.srcDirs = ['src/main/res']
+            assets.srcDirs = ['src/main/assets']
+        }
+        test {
+            java {
+                srcDir 'src/test/java'
+                srcDir 'src/test/kotlin/'
+            }
+        }
+        androidTest {
+            java {
+                srcDir 'src/androidTest/java'
+                srcDir 'src/androidTest/kotlin/'
+            }
+        }
+    }
+}
+
+configurations.all {
+    resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.2'
+    resolutionStrategy {
+        force "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
+        force "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+        force "com.android.support:design:${rootProject.ext.supportLibVersion}"
+        failOnVersionConflict()
+        preferProjectModules()
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "com.android.support:design:${rootProject.ext.supportLibVersion}"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.sun.xml.txw2:txw2:20110809'
+    implementation 'github.joniles.jon.iles.rtfparserkit:rtfparserkit:0.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
